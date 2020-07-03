@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:  
+  ml_frontend:
+    image: gitlab.virtualbaker.com:4567/precibake/ml_labelling_tool
+    container_name: ml-labelling-frontend
+    build: .
+    ports:
+      - '3006:3000'
+    environment:
+      - NODE_ENV=production      
+      - CHOKIDAR_USEPOLLING=true
+    tty: true
