@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 // import { Logo } from 'components';
 
 const useStyles = makeStyles(theme => ({
-  loginHeader: ({ loginImageSm }) => ({
+  loginHeader: () => ({
     padding: `10% 18% ${theme.spacing(0)}`,
     minHeight: '25%',
     display: 'flex',
@@ -14,9 +14,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(5, 7, 4),
-      background: `url(${loginImageSm}) no-repeat ${
-        theme.palette.secondary.light
-      }`,
+      background: `url() no-repeat ${theme.palette.secondary.light}`,
       backgroundSize: 'cover',
       backgroundPosition: 'left center',
     },

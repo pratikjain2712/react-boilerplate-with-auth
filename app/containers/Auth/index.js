@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     height: '100vh',
   },
   imageArea: {
-    background: `url(${loginImageMd}) no-repeat`,
+    background: `url() no-repeat`,
     backgroundSize: 'cover',
     backgroundPosition: 'left bottom',
   },
@@ -43,24 +43,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Auth({
-  //   token,
-  match,
-  //   succesRoute,
-  //   logoPath,
-  //   loginImageSm,
-  //   loginImageMd,
-  //   logedIn,
-  //   languageList,
-  //   isRememberMeChecked,
-  //   rememberMe
-}) {
+function Auth() {
   const classes = useStyles();
-
-  //   if (token) {
-  //     return <Redirect to={succesRoute} />;
-  //   }
-
   return (
     <Container className={classes.mainContainer}>
       <div className={classes.root}>
@@ -74,43 +58,12 @@ function Auth({
             <section className={classes.loginArea}>
               <Switch>
                 {/* <Redirect exact from="/" to="/login" /> */}
-                <Route
-                  exact
-                  path="/login"
-                  render={props => (
-                    <Login
-                    //   {...props}
-                    //   succesRoute={succesRoute}
-                    //   logedIn={logedIn}
-                    //   loginImageSm={loginImageSm}
-                    //   logoPath={logoPath}
-                    //   languageList={languageList}
-                    //   isRememberMeChecked={isRememberMeChecked}
-                    //   rememberMe={rememberMe}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/logout"
-                  render={props => (
-                    <Logout
-                    //   {...props}
-                    //   logoPath={logoPath}
-                    //   loginImageSm={loginImageSm}
-                    />
-                  )}
-                />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/logout" component={Logout} />
                 <Route
                   exact
                   path="/sessionexpired"
-                  render={props => (
-                    <SessionExpired
-                    //   {...props}
-                    //   logoPath={logoPath}
-                    //   loginImageSm={loginImageSm}
-                    />
-                  )}
+                  component={SessionExpired}
                 />
                 <Redirect from="/" to="/login" />
               </Switch>

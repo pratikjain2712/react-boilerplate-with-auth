@@ -11,6 +11,12 @@ import {
   TextField,
   Button,
   Typography,
+  Menu,
+  MenuItem,
+  Hidden,
+  Snackbar,
+  SnackbarContent,
+  useMediaQuery,
 } from '@material-ui/core';
 // import { CustomSVG, Logo } from 'components';
 import { makeStyles, useTheme } from '@material-ui/styles';
@@ -22,7 +28,7 @@ import * as actions from '../../App/actions';
 import { makeSelectAuthData } from '../../App/selectors';
 
 const useStyles = makeStyles(theme => ({
-  loginHeader: ({ loginImageSm }) => ({
+  loginHeader: () => ({
     padding: `10% 16% ${theme.spacing(0)}`,
     minHeight: '25%',
     display: 'flex',
@@ -30,9 +36,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(5, 7, 4),
-      background: `url(${loginImageSm}) no-repeat ${
-        theme.palette.secondary.light
-      }`,
+      background: `url() no-repeat ${theme.palette.secondary.light}`,
       backgroundSize: 'cover',
       backgroundPosition: 'left center',
       // height: '240px'
@@ -199,23 +203,26 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const key = 'auth';
 
 const Login = props => {
   // useInjectReducer({ key, reducer });
   const classes = useStyles();
+  const theme = useTheme();
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'));
   //   const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [] = useState();
+  const [selectedLang, setSelectedLang] = useState();
   // languageList.find(l => l.id === i18n.language)
-  const [] = useState('');
-  const [isVisiblePass] = useState(false);
-  const [, setAnchorEl] = useState(null);
-  const [] = useState(false);
-  const [] = useState('snackBarInfo');
-  const [isErrorEmail] = useState(false);
-  const [isSubmitClicked] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isVisiblePass, setVisiblePass] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isSnackBar, setSnackBar] = useState(false);
+  const [errorMessageType, setErrorMessageType] = useState('snackBarInfo');
+  const [isErrorEmail, setIsErrorEmail] = useState(false);
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   function Alert(other) {
     return <MuiAlert elevation={4} variant="filled" {...other} />;
@@ -231,9 +238,23 @@ const Login = props => {
     }
   }, [email, isSubmitClicked]);
 
+  function handleClick(event) {
+    setAnchorEl(event.currentTarget);
+  }
+  function handleClose() {
+    setAnchorEl(null);
+  }
+  const languageSelection = l => () => {
+    i18n.changeLanguage(l.id);
+    setSelectedLang(l);
+    handleClose();
+  };
+  const handlePasswordVisiblity = () => {
+    setVisiblePass(!isVisiblePass);
+  };
   const submit = () => {
     // console.log(email, pass , rememberMe);
-    new Promise((resolve) => {
+    new Promise((resolve, reject) => {
       props.doLogin(email, pass, rememberMe, resolve);
     }).then(() => {
       props.history.push('/');
@@ -241,6 +262,9 @@ const Login = props => {
     // props.history.push('/');
   };
 
+  const handleSnackBarClose = () => {
+    setSnackBar(false);
+  };
   const keyPress = e => {
     if (e.key === 'Enter') {
       submit();
@@ -250,6 +274,12 @@ const Login = props => {
   return (
     <Fragment>
       <header className={classes.loginHeader}>
+        {/* <Hidden mdUp>
+          <Logo md path={logoPath} className={classes.logo} />
+        </Hidden>
+        <Hidden smDown>
+          <Logo lg path={logoPath} />
+        </Hidden> */}
         <Typography
           variant="h4"
           gutterBottom={false}
@@ -296,7 +326,17 @@ const Login = props => {
           type={isVisiblePass ? 'text' : 'password'}
           value={pass}
           onChange={e => setPass(e.target.value)}
-          InputProps={{ classes: { inputMarginDense: classes.inputfield } }}
+          InputProps={{
+            // endAdornment: (
+            //   <CustomSVG
+            //     name={isVisiblePass ? 'showPassword' : 'hidePassword'}
+            //     fill={theme.palette.primary.dark}
+            //     onClick={handlePasswordVisiblity}
+            //     className={classes.hidePassword}
+            //   />
+            // ),
+            classes: { inputMarginDense: classes.inputfield },
+          }}
           onKeyPress={keyPress}
         />
         <FormControlLabel
